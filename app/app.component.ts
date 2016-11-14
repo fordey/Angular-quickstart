@@ -1,12 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import {Vessell} from './vessell';
-
-const VESSELLS: Vessell[] = [
-  { id: 1, name: 'Titanic' },
-  { id: 2, name: 'Louisitania' },
-  { id: 3, name: 'Boatscville ' }
-];
+import {VessellService} from './vessell.service';
 
 @Component({
   selector: 'my-app',
@@ -69,12 +64,25 @@ const VESSELLS: Vessell[] = [
       heightvessellsm;
       margin-right: .8em;
       border-radius: 4px 0 0 4px;
-  vessells`]
+  vessells`],
+
+  providers: [VessellService]
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit {
   title = 'Vessells';
-  vessells = VESSELLS;
+  vessells : Vessell[];
   selectedVessell: Vessell;
+
+  constructor(private vessellService : VessellService){ }
+
+  getVessells(): void{
+    this.vessellService.getVessells().then(vessells => this.vessells = vessells);
+  }
+
+  ngOnInit():void{
+    this.getVessells();
+  }
 
   onSelect(vessell: Vessell): void {
     this.selectedVessell = vessell;
